@@ -1,45 +1,70 @@
 module JulTest
 
-export jt, runtests
+export case, runtests
 
-immutable type MyTest
+immutable type TestCase
   description::String
   ex::Expr
 end
 
-tests = MyTest[]
+immutable type Result
+  passing::Bool
+  case::TestCase
+  error::Exception
+end
 
-macro jt(ex)
+tests = TestCase[]
+
+macro case(ex)
   description = ex.args[2]
-  newtest = MyTest(description, ex)
+  newtest = TestCase(description, ex)
   push!(tests, newtest)
 end
 
 function runtests()
-  passing = 0
+  results = Result[]
   shuffled = shuffle(tests)
+  
   for test in shuffled
     result = run(test)
-    if result
-      passing += 1
+    push!(results, result)
+    if result.passing
+      print(".")
+    else
+      print("-")
     end
   end
-  println("$passing out of $(length(tests)) passed")
+
+  report(results)
+
 end
 
 #where does function doc go?
-function run(test::MyTest) # Can I specify this must return boolean?
+function run(test::TestCase) # Can I specify this must return type Result?
   try
     eval(test.ex)
-    println("Success: ", test.description)
-    println()
-    return true # returns true if test succeeeds
+    return Result(true, test, None) # should this be none - is there a better way?
   catch error
-    println("Failure: ", test.description)
-    println(error)
-    println()
-    return false #returns false if failure
+    return Result(false, test, error)
   end
+end
+
+function report(results)
+  failing = filter(x -> x.passing == false, results)
+
+  total  = length(results)
+  num_failing = length(failing)
+  println()
+  println("$num_failing failed out of $total")
+  println()
+
+  map(report_failure, failing)
+end
+
+function report_failure(result::Result)
+    println("Failure: ", result.case.description)
+    println(result.error)
+    println()
 end
 
 end
