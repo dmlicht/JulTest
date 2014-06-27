@@ -1,5 +1,7 @@
 module JulTest
 
+export jt, runtests
+
 immutable type MyTest
   description::String
   ex::Expr
@@ -26,7 +28,7 @@ function runtests()
 end
 
 #where does function doc go?
-function run(test::MyTest)
+function run(test::MyTest) # Can I specify this must return boolean?
   try
     eval(test.ex)
     println("Success: ", test.description)
@@ -39,17 +41,5 @@ function run(test::MyTest)
     return false #returns false if failure
   end
 end
-
-@jt begin "One plus one equals two"
-  @assert (2 + 1) == 2
-end
-
-@jt begin "verify x and y end up the same"
-  x = 10
-  y = 20
-  @assert x == y
-end
-
-runtests()
 
 end
