@@ -1,0 +1,5 @@
+* test discovery/runner
+* remove runtests call requirement
+* assure that tests are isolated from one another
+* setup / teardown
+* fixtures
