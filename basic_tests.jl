@@ -6,8 +6,8 @@ end
 
 @case begin "verify x and y end up the same"
   x = 20
-  y = 20
-  @assert x == y
+  y = 21
+  @assert
 end
 
 runtests()

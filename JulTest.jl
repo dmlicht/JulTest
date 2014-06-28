@@ -4,30 +4,31 @@ export case, runtests
 
 immutable type TestCase
   description::String
-  ex::Expr
+  expr::Expr
 end
 
 immutable type Result
   passing::Bool
   case::TestCase
-  error::Exception
+  error #todo figure out how to specify as Exception type
 end
 
 tests = TestCase[]
 
-macro case(ex)
-  description = ex.args[2]
-  newtest = TestCase(description, ex)
+macro case(expr)
+  description = expr.args[2]
+  newtest = TestCase(description, expr)
   push!(tests, newtest)
 end
 
 function runtests()
-  results = Result[]
   shuffled = shuffle(tests)
+  results = Result[]
   
   for test in shuffled
     result = run(test)
     push!(results, result)
+
     if result.passing
       print(".")
     else
@@ -36,13 +37,12 @@ function runtests()
   end
 
   report(results)
-
 end
 
 #where does function doc go?
 function run(test::TestCase) # Can I specify this must return type Result?
   try
-    eval(test.ex)
+    eval(test.expr)
     return Result(true, test, None) # should this be none - is there a better way?
   catch error
     return Result(false, test, error)
