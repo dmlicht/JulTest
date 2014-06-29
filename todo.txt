@@ -1,5 +1,15 @@
 * test discovery/runner
-* remove runtests call requirement
+  * file path setup
+  * grouping tests in same file
+  * executing specific tests
+
 * assure that tests are isolated from one another
-* setup / teardown
-* fixtures
+
+* test utilities 
+  * setup / teardown
+  * fixtures
+
+* execute tests in parallel
+
+* package and distribute
+  * easily use from a different directory
