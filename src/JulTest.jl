@@ -16,6 +16,7 @@ end
 tests = TestCase[]
 
 macro case(expr)
+  println("new case")
   description = expr.args[2]
   newtest = TestCase(description, expr)
   push!(tests, newtest)

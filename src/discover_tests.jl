@@ -6,7 +6,7 @@ function collect()
   test_dir_exists::Bool = isdir(test_dir)
   if test_dir_exists
     filenames::Array{String} = readdir(test_dir)
-    map(x -> include("../$test_dir$x"), filenames) #figure out how paths work better
+    map(filename -> include("../$test_dir$filename"), filenames) #figure out how paths work better
   else
     println("testdir not found")
   end
